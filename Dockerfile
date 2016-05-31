@@ -46,7 +46,7 @@ RUN echo "NETWORKING=yes" > /etc/sysconfig/network && \
     # disable unnecessary services
     for SERVICE in iscsi iscsid lvm2-monitor mcstrans netconsole netfs network rawdevices xinetd; do chkconfig $SERVICE off; done && \
     # enable necessary services
-    for SERVICE in icinga lighttpd exim; do chkconfig $SERVICE on; done
+    for SERVICE in icinga lighttpd exim nsca; do chkconfig $SERVICE on; done
 
 # Copy in config
 ADD etc/lighttpd /etc/lighttpd/
