@@ -38,7 +38,9 @@ RUN yum -y install \
   yum update -y
 
 # Allow unified config independent of architecture
-RUN ln -s /usr/lib64/icinga /usr/lib/icinga
+RUN ln -s /usr/lib64/icinga /usr/lib/icinga && \
+    # Allow icinga commands from web
+    usermod -a -G icingacmd lighttpd
 
 RUN echo "NETWORKING=yes" > /etc/sysconfig/network && \
     # Do not launch *getty on tty devices - they are not accessible
