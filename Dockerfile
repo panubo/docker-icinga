@@ -45,13 +45,20 @@ RUN ln -s /usr/lib64/icinga /usr/lib/icinga && \
 RUN echo "NETWORKING=yes" > /etc/sysconfig/network && \
     # Do not launch *getty on tty devices - they are not accessible
     sed -i -e '/getty/d' /etc/inittab && \
+    # Disable Udev
+    sed -i -e 's@^/sbin/start_udev@@' /etc/rc.sysinit && \
     # disable unnecessary services
     for SERVICE in iscsi iscsid lvm2-monitor mcstrans netconsole netfs network rawdevices xinetd; do chkconfig $SERVICE off; done && \
     # enable necessary services
-    for SERVICE in icinga lighttpd exim nsca; do chkconfig $SERVICE on; done
+    for SERVICE in icinga lighttpd exim nsca; do chkconfig $SERVICE on; done && \
+    # cache spool dir
+    cp -a /var/spool/icinga /var/spool/icinga.cache
 
 # Copy in config
 ADD etc/lighttpd /etc/lighttpd/
 
-ENTRYPOINT ["/sbin/init.real"]
+ADD entry.sh /
+
+ENTRYPOINT ["/entry.sh"]
+
 EXPOSE 80
