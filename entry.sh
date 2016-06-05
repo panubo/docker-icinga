@@ -9,4 +9,7 @@ if [ ! "$(ls -A /var/spool/icinga)" ]; then
    cp -a /var/spool/icinga.cache/* /var/spool/icinga/
 fi
 
+# fix mountdir permissions
+chown icinga:icinga /var/spool/icinga/
+
 exec /sbin/init.real
